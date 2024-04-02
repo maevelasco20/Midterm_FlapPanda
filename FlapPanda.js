@@ -182,3 +182,5 @@ function detectCollision(a, b) {
             a.y < b.y + b.height &&
             a.y + a.height > b.y;
 }
+
+
