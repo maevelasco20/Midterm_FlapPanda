@@ -11,7 +11,6 @@ let pandaHeight = 45;
 let pandaX = boardWidth/8;
 let pandaY = boardHeight/2;
 let pandaImg;
-
 let panda = {
     x : pandaX,
     y : pandaY,
@@ -21,11 +20,10 @@ let panda = {
 
 //bamboo pipes
 let pipeArray = []
-let pipeWidth = 64;
+let pipeWidth = 30;
 let pipeHeight = 512; 
 let pipeX = boardWidth;
 let pipeY = 0;
-
 let topPipeImg;
 let bottomPipeImg;
 
@@ -37,6 +35,7 @@ let gravity = 0.4;
 let gameOver = false, startGame = false
 let score = 0;
 let playBtn = null
+let background
 let wooshSound = null, hitSound = null, scoreSound = null
 window.onload = function() {
      wooshSound = new Howl({
@@ -84,7 +83,7 @@ function update() {
 
     //dagan sa panda
     velocityY += gravity;
-    panda.y = Math.max(panda.y + velocityY, 0);
+    panda.y = Math.max(panda.y + velocityY);
     context.drawImage(pandaImg, panda.x, panda.y, panda.width, panda.height)
 
     if (panda.y > board.height) {
@@ -101,13 +100,12 @@ function update() {
             score += 0.5; //0.5 kay naa may 2 ka bamboo pipes! so 0.5*2 =1 for each of bamboo pipes
             pipe.passed = true;
             scoreSound.play()
+            
         }
-
-
         if (detectCollision(panda, pipe)) {
             gameOver = true;
-        }
-            
+            localStorage.setItem("score", score)
+        } 
     }
 
     //clear pipes
@@ -118,17 +116,16 @@ function update() {
     //score
     context.fillStyle = "white";
     context.font="40px Berlin Sans FB";
-    context.fillText(score, 110, 47);
-    context.fillText("Score:", 5, 45)
+    context.fillText(score, 10, 30);
 
     if (gameOver) {
         playBtn.style.display = "block"
-        context.fillText("GAME OVER!", 60, 350);
+        context.fillText("GAME OVER!", 55, 300);
+        context.fillText(`HI ${localStorage.getItem('score')}`, 130, 340);
         startGame = false
         hitSound.play()
     }
 }
-
 function placePipes(){
     if (gameOver || !startGame) {
         return;
@@ -182,5 +179,3 @@ function detectCollision(a, b) {
             a.y < b.y + b.height &&
             a.y + a.height > b.y;
 }
-
-
