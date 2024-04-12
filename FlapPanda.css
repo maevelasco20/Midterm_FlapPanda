@@ -14,6 +14,7 @@ body {
 }
 
 #board {
+    /*background-color: skyblue;*/
     height: 100dvh;
     background-repeat: no-repeat;
     background-size: cover;
@@ -39,10 +40,25 @@ body {
     border-radius: 10px;
     border: none;
     color:#fff;   
-
-    
     cursor: pointer;
     align-self: center;
     margin-top: 40dvh;
 
+}
+
+.icn-sttngs{
+    border: none;
+    background-color: transparent;
+    font-size: xx-large;
+    text-align: right;
+    position: absolute;
+}
+
+.setting-icon {
+    display: grid;
+    place-content: center;
+}
+
+.icon{
+    align-items: 50px;
 }
