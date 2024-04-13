@@ -1,0 +1,76 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+.login-card{
+    width: 100%;
+    height: 18vh;
+    background: transparent;
+    position: relative;
+    text-align: center;
+}
+.login-card img {
+    width: 100px;
+}
+.container{
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(45deg, rgb(8, 134, 29) , rgb(5, 75, 36));
+    position: relative;
+}
+.container .box{
+    position: absolute;
+    width: 400px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50% , -50%);
+    background-color: rgb(107, 165, 110);
+    padding: 25px 25px 45px 25px;
+    border-radius: 30px;
+}
+h2{
+    text-align: center;
+    font-size: 45px;
+    position: relative;
+}
+form {
+    width: 345px;
+    margin-left: 20px;
+  }
+form label {
+    display: flex;
+    margin-top: 20px;
+    font-size: 18px;
+}
+form input {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border: 1px solid rgb(4, 68, 41);
+    border-radius: 10px;
+    outline: none;
+}
+  input[type="submit"] {
+    width: 360px;
+    height: 40px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 15px;
+    background-color: #0c6d24;
+    color: white;
+    font-size: 18px;
+}
+p {
+    text-align: center;
+    padding-top: 20px;
+    font-size: 15px;
+}
+.para-2 {
+    text-align: center;
+    color: black;
+    font-size: 15px;
+    margin-top: -10px;
+  }
+  .para-2 a {
+    color: #013d0e;
+}
