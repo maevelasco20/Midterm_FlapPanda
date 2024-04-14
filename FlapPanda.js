@@ -32,8 +32,15 @@ let velocityX = -2; //dagan sa pipes
 let velocityY = 0; //lupad sa panda
 let gravity = 0.4;
 
+// touch panda movement
+document.addEventListener("touchstart", handleTouchStart);
+document.addEventListener("touchend", handleTouchEnd);
+
+let touchStartY = null;
+
 let gameOver = false, startGame = false
 let score = 0;
+let highScore = localStorage.getItem("highScore") || 0;
 let playBtn = null
 let background
 let wooshSound = null, hitSound = null, scoreSound = null
@@ -53,7 +60,7 @@ window.onload = function() {
     context = board.getContext("2d");
     playBtn = document.querySelector(".playBtn")
 
-    //load images
+    //load panda
     pandaImg = new Image();
     pandaImg.src = "./flypanda.png";
     pandaImg.onload = function() {
@@ -68,12 +75,14 @@ window.onload = function() {
     document.addEventListener("keydown", movePanda)
     playBtn.addEventListener("click", handlePlayBtn)
     requestAnimationFrame(update);
-    setInterval(placePipes, 1500); //
+    setInterval(placePipes, 1200);
 }
+
 const handlePlayBtn = (e) => {
     e.target.style.display  = "none"
     startGame = true
 }
+
 function update() {
     requestAnimationFrame(update);
     if (gameOver || !startGame) {
@@ -100,11 +109,28 @@ function update() {
             score += 0.5; //0.5 kay naa may 2 ka bamboo pipes! so 0.5*2 =1 for each of bamboo pipes
             pipe.passed = true;
             scoreSound.play()
+
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem("highScore", highScore);
+            }
+
+            if (score > 20) {
+                velocityX = -4;
+            }
             
+            if (score > 40) {
+                velocityX = -6;
+            }
+
+            if (score > 60) {
+                velocityX = -8;
+            }
         }
+
         if (detectCollision(panda, pipe)) {
             gameOver = true;
-            localStorage.setItem("score", score)
+            
         } 
     }
 
@@ -116,24 +142,25 @@ function update() {
     //score
     context.fillStyle = "white";
     context.font="40px Berlin Sans FB";
+    localStorage.setItem("score", score)
     context.fillText(score, 10, 30);
 
     if (gameOver) {
         playBtn.style.display = "block"
+        playBtn.textContent = "Play Again";
         context.fillText("GAME OVER!", 55, 300);
-        context.fillText(`HI ${localStorage.getItem('score')}`, 130, 340);
+        context.fillText(`HI ${highScore}`, 130, 340);
         startGame = false
         hitSound.play()
     }
 }
+
 function placePipes(){
     if (gameOver || !startGame) {
         return;
     }
-
     let randomPipeY = pipeY - pipeHeight/4 - Math.random()*(pipeHeight/2);
     let openingSpace = board.height/4
-
     let topPipe = {
         img : topPipeImg,
         x : pipeX,
@@ -142,9 +169,7 @@ function placePipes(){
         height : pipeHeight,
         passed : false
     }
-
     pipeArray.push(topPipe);
-
     let bottomPipe = {
         img : bottomPipeImg,
         x : pipeX,
@@ -154,6 +179,28 @@ function placePipes(){
         passed : false
     }
     pipeArray.push(bottomPipe)
+}
+
+// wapa ma try if ma touch
+function handleTouchStart(e) {
+    if (!startGame) return;
+    touchStartY = e.touches[0].clientY;
+    if (!isJumping) {
+        isJumping = true;
+        jumpVelocity = -jumpStrength;
+    }
+}
+
+// touch wapa ni ma try
+function handleTouchEnd(e) {
+    if (touchStartY !== null) {
+        let touchEndY = e.changedTouches[0].clientY;
+        let deltaY = touchEndY - touchStartY;
+        if (deltaY > 0 && deltaY > 50) {
+            isJumping = false;
+        }
+        touchStartY = null;
+    }
 }
 
 function movePanda(e) {
@@ -179,35 +226,3 @@ function detectCollision(a, b) {
             a.y < b.y + b.height &&
             a.y + a.height > b.y;
 }
-
-/*const backgrounds = [
-    url("./bg_1.jpg"),
-    url("./bg_2.jpg"),
-    url("./bg_3.jpg"),
-    url("./bg_4.jpg"),
-    url("./bg_5.jpg")
-    // add more backgrounds here
-  ];
-  
-  let backgroundIndex = 1;
-  
-  function countScore() {
-      scoreInterval = setInterval(() => {
-          setScore(score + 1);
-          if(score % 10 === 0) {
-              document.body.style.backgroundImage = backgrounds[backgroundIndex];
-              backgroundIndex = (backgroundIndex + 1) % backgrounds.length;
-          }
-      }, 100);
-  }
-  
-  <img src="" id="image">
-
-                <script type="text/javascript">
-                    let image = document.getElementById('image');
-                    let images = ['bg_1.jpg', 'bg_2.jpg', 'bg_3.jpg', 'bg_4.jpg', 'bg_5.jpg', ]
-                    setInterval(function(){
-                        let random = Math.floor(Math.random() * 4);
-                        image.src = images[random];
-                    }, 800)
-                </script>*/
