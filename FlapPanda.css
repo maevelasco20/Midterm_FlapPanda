@@ -45,20 +45,3 @@ body {
     margin-top: 40dvh;
 
 }
-
-.icn-sttngs{
-    border: none;
-    background-color: transparent;
-    font-size: xx-large;
-    text-align: right;
-    position: absolute;
-}
-
-.setting-icon {
-    display: grid;
-    place-content: center;
-}
-
-.icon{
-    align-items: 50px;
-}
