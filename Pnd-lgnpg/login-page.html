@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="shortcut icon" type="x-icon" href="b_logo.png">
+    <link rel="shortcut icon" type="x-icon" href="/FlapPanda/b_logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <link rel="stylesheet" href="style.css">
@@ -30,7 +30,7 @@
                 const email = formdata.get("email"), password = formdata.get("password")
                 console.log(`email ${email}, password ${password}`)
                 if (email === adminUsername && password === adminPassword) {
-                    window.location.assign("index.html")
+                    window.location.assign("/FlapPanda/index.html")
                 } else {
                     alert("Wag pugsin ang taong di ganahan sa atoa")
                 }
@@ -41,6 +41,5 @@
             </p>
         </div>
 
-    
 </body>
 </html>
