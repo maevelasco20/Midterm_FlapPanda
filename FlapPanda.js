@@ -1,9 +1,11 @@
 
 //background
-let board;
+let board = document.getElementById("board");
 let boardWidth = 340;
 let boardHeight = 630;
 let context;
+
+
 
 //panda 
 let pandaWidth = 55;
@@ -18,6 +20,7 @@ let panda = {
     height : pandaHeight
 }
 
+
 //bamboo pipes
 let pipeArray = []
 let pipeWidth = 30;
@@ -31,12 +34,6 @@ let bottomPipeImg;
 let velocityX = -2; //dagan sa pipes
 let velocityY = 0; //lupad sa panda
 let gravity = 0.4;
-
-// touch panda movement
-document.addEventListener("touchstart", handleTouchStart);
-document.addEventListener("touchend", handleTouchEnd);
-
-let touchStartY = null;
 
 let gameOver = false, startGame = false
 let score = 0;
@@ -60,7 +57,7 @@ window.onload = function() {
     context = board.getContext("2d");
     playBtn = document.querySelector(".playBtn")
 
-    //load panda
+    //load images
     pandaImg = new Image();
     pandaImg.src = "./flypanda.png";
     pandaImg.onload = function() {
@@ -83,6 +80,10 @@ const handlePlayBtn = (e) => {
     startGame = true
 }
 
+function changeBoardBackground(imageURL) {
+    board.style.backgroundImage = `url('${imageURL}')`;
+}
+
 function update() {
     requestAnimationFrame(update);
     if (gameOver || !startGame) {
@@ -94,7 +95,7 @@ function update() {
     velocityY += gravity;
     panda.y = Math.max(panda.y + velocityY);
     context.drawImage(pandaImg, panda.x, panda.y, panda.width, panda.height)
-
+    
     if (panda.y > board.height) {
         gameOver = true;
     }
@@ -106,7 +107,7 @@ function update() {
         context.drawImage(pipe.img, pipe.x, pipe.y, pipe.width, pipe.height);
 
         if (!pipe.passed && panda.x > pipe.x + pipe.width) {
-            score += 0.5; //0.5 kay naa may 2 ka bamboo pipes! so 0.5*2 =1 for each of bamboo pipes
+            score += 0.5; //0.5 kay naa may 2 ka bamboo pipes, so 0.5*2 =1 for each of bamboo pipes
             pipe.passed = true;
             scoreSound.play()
 
@@ -114,17 +115,32 @@ function update() {
                 highScore = score;
                 localStorage.setItem("highScore", highScore);
             }
-
-            if (score > 20) {
+            if (score % 20 === 0) { // Change background every 20 points
+                changeBoardBackground(getRandomBackgroundImage());
+            }
+            if (score > 30) {
+                velocityX = -2.5;
+            }
+            if (score > 30) {
+                velocityX = -3;
+            }
+            if (score > 40) {
+                velocityX = -3.5;
+            }
+            if (score > 50) {
                 velocityX = -4;
             }
-            
-            if (score > 40) {
+            if (score > 70) {
                 velocityX = -6;
             }
-
-            if (score > 60) {
-                velocityX = -8;
+            if (score > 85) {
+                velocityX = -4.5;
+            }
+            if (score > 100) {
+                velocityX = -5;
+            }
+            if (score > 120) {
+                velocityX = -6;
             }
         }
 
@@ -144,15 +160,33 @@ function update() {
     context.font="40px Berlin Sans FB";
     localStorage.setItem("score", score)
     context.fillText(score, 10, 30);
+    context.fillText(`HI ${highScore}`, 250, 30);
 
     if (gameOver) {
         playBtn.style.display = "block"
         playBtn.textContent = "Play Again";
         context.fillText("GAME OVER!", 55, 300);
-        context.fillText(`HI ${highScore}`, 130, 340);
         startGame = false
         hitSound.play()
     }
+}
+
+function getRandomBackgroundImage() {
+    const backgroundImages = [
+        "./bg_1.jpg",
+        "./bg_2.jpg",
+        "./bg_3.jpg",
+        "./bg_4.jpg",
+        "./bg_5.jpg",
+        "./bg_5.avif",
+        "./bg_6.webp",
+
+    ];
+    return backgroundImages[Math.floor(Math.random() * backgroundImages.length)];
+}
+
+function changeBoardBackground(imageURL) {
+    board.style.backgroundImage = `url('${imageURL}')`;
 }
 
 function placePipes(){
@@ -181,28 +215,6 @@ function placePipes(){
     pipeArray.push(bottomPipe)
 }
 
-// wapa ma try if ma touch
-function handleTouchStart(e) {
-    if (!startGame) return;
-    touchStartY = e.touches[0].clientY;
-    if (!isJumping) {
-        isJumping = true;
-        jumpVelocity = -jumpStrength;
-    }
-}
-
-// touch wapa ni ma try
-function handleTouchEnd(e) {
-    if (touchStartY !== null) {
-        let touchEndY = e.changedTouches[0].clientY;
-        let deltaY = touchEndY - touchStartY;
-        if (deltaY > 0 && deltaY > 50) {
-            isJumping = false;
-        }
-        touchStartY = null;
-    }
-}
-
 function movePanda(e) {
     if(!startGame) return
     if (e.code == "Space" || e.code == "ArrowUp" || e.code == "KeyW") {
@@ -226,3 +238,4 @@ function detectCollision(a, b) {
             a.y < b.y + b.height &&
             a.y + a.height > b.y;
 }
+
