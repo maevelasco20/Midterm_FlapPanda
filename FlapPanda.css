@@ -11,20 +11,24 @@ body {
     padding: 0;
     margin: 0;
     overflow: hidden;
+    background-image: url('bg.humot.jpg');
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
 }
 
 #board {
-    /*background-color: skyblue;*/
-    height: 100dvh;
+    height: 100vh;
     background-repeat: no-repeat;
+    background-image: url("./bamboobg.avif");
     background-size: cover;
-    background-image: url("./bamboobg.avif")
+    background-position: center;
 }
 .plyBtnMain {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 100;
     display: grid;
     place-content: center;
     width: 100%;
@@ -40,8 +44,6 @@ body {
     border-radius: 10px;
     border: none;
     color:#fff;   
-    cursor: pointer;
     align-self: center;
     margin-top: 40dvh;
-
 }
