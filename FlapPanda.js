@@ -71,8 +71,13 @@ window.onload = function() {
     bottomPipeImg.src = "./BamPipe.png"
     document.addEventListener("keydown", movePanda)
     playBtn.addEventListener("click", handlePlayBtn)
+    //requestAnimationFrame(update);
+    //setInterval(placePipes, 1200);
+    board.addEventListener("touchstart", movePanda);
     requestAnimationFrame(update);
     setInterval(placePipes, 1200);
+
+
 }
 
 const handlePlayBtn = (e) => {
@@ -117,6 +122,9 @@ function update() {
             }
             if (score % 20 === 0) { // Change background every 20 points
                 changeBoardBackground(getRandomBackgroundImage());
+            }
+            if (score < 0) {
+                velocityX = -2;
             }
             if (score > 30) {
                 velocityX = -2.5;
@@ -217,7 +225,7 @@ function placePipes(){
 
 function movePanda(e) {
     if(!startGame) return
-    if (e.code == "Space" || e.code == "ArrowUp" || e.code == "KeyW") {
+    if (e.code == "Space" || e.code == "ArrowUp" || e.code == "KeyW" || e.type == "touchstart") {
         wooshSound.play()
         //jump
         velocityY = -6;
